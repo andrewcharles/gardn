@@ -1,0 +1,89 @@
+A minimal docker containerised API
+
+bare_app.py -  This one is completely simple, for the purpose of getting the docker side of things up and running.
+app.py - This one uses more dependencies.
+
+https://httr2.r-lib.org/articles/httr2.html
+
+# Run the app in your local environment
+
+1. Set up environment variables:
+source setup.sh
+
+2. Check config settings in YAML file:
+app/config.yml
+
+3. Build and run using the Dockerfile:
+Base - miniconda
+environment.yml
+
+# Running fastapi at the command line
+
+uvicorn app:app --reload --port 80
+uvicorn app:app --reload --port 80 --host 0.0.0.0
+
+Because we're running on conda we need to activate the environment
+every time. It's suboptimal, but this way we get integrated
+scientific packages.
+See https://pythonspeed.com/articles/activate-conda-dockerfile/
+
+
+# Earth engine notes: credentials
+How to get ee credentials into the docker image? 
+Copy the service account file - be very careful with this, the keyfile is like
+your password. Keep track of copies, monitor usage and rotate frequently.
+
+gcloud iam service-accounts keys create $KEY --iam-account $SERVICE_ACCOUNT
+
+# python/conda enviro setup
+
+First time:
+mkdir data
+setup_conda.sh
+conda activate apidev 
+
+# Running docker api on cloudrun
+1. Pick an existing project
+2. ...
+
+# Restful
+Clients <-HTTP> Servers [layered]
+Stateless
+Cacheable data
+Interface:  identifiable resources, self-descriptive, hypertext
+
+# REFERENCES
+
+Running docker images:
+https://towardsdatascience.com/the-easiest-way-to-run-python-in-google-cloud-illustrated-d307c9e1651c
+
+Best practices mxing conda and pip:
+https://www.anaconda.com/blog/using-pip-in-a-conda-environment
+
+Great conda install reference
+https://edcarp.github.io/introduction-to-conda-for-data-scientists/04-sharing-environments/index.html
+
+Using Docker:
+https://geohackweek.github.io/Introductory/docker-tutorial_temp/
+
+Using GCP with earth engine:
+https://github.com/michaelfdewitt/ee_operationalization_demo/blob/main/example_b.py
+
+Installation instructions:
+https://developers.google.com/earth-engine/guides/python_install-conda#install_api
+
+The Earth Engine Python API is distributed as a conda-forge package at: https://anaconda.org/conda-forge/earthengine-api. It is installed with the conda install command.
+Recommended to make a special purpose conda env.
+https://developers.google.com/earth-engine/guides/python_install-conda#install_api
+
+Alternative: to sign into Earth Engine:
+earthengine authenticate
+
+Upon entering the authorization code, an authorization token gets saved to a credentials file which can be found below. 
+Subsequent use of the API's ee.Initialize() command and the earthengine command line tool will look to 
+this file to authenticate. If you want to revoke authorization, simply delete the credentials file.
+
+ls $HOME/.config/earthengine/credentials
+
+conda update -c conda-forge earthengine-api
+
